@@ -38,7 +38,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    print('init'); // ←ここ！
+    setState(() {
+      _counter = 10; // 初期化処理！
+    });
   }
 
   @override
