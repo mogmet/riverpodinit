@@ -64,6 +64,7 @@ class MyHomePage extends ConsumerWidget {
     if (exception == null) {
       return;
     }
+    // 直接表示してしまうと、ビルド前にエラーが起きた場合ダイアログが表示できないのでaddPostFrameCallbackをうまく使う
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       showDialog(
           context: context,
