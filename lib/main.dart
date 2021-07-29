@@ -27,8 +27,10 @@ class MyHomePage extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     // 値が変わったら再描画してほしいのでwatchする
     final counter = watch(MyHomePageController.provider).counter;
+    final exception = watch(MyHomePageController.provider).exception;
     // stateの監視ではなく、controllerの処理を呼びたいときに使うのでreadで呼ぶ
     final controller = context.read(MyHomePageController.provider.notifier);
+    showError(context, exception);
     return Scaffold(
       appBar: AppBar(
         title: Text('Counter demo'),
@@ -56,5 +58,20 @@ class MyHomePage extends ConsumerWidget {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void showError(BuildContext context, Exception? exception) {
+    if (exception == null) {
+      return;
+    }
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      showDialog(
+          context: context,
+          builder: (BuildContext childContext) {
+            return AlertDialog(title: Text(exception.toString()));
+          });
+      // エラーが再表示されないように抹消する
+      context.read(MyHomePageController.provider.notifier).dismissException();
+    });
   }
 }
