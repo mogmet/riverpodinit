@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// 動的に表示を変えたいState
 class MyHomePageControllerState {
   MyHomePageControllerState({this.counter = 0});
-  int counter;
+  final int counter;
 
   /// 値を変えるようのメソッド
   MyHomePageControllerState copyWith({required int counter}) {
@@ -14,7 +14,7 @@ class MyHomePageControllerState {
 /// コントローラ
 class MyHomePageController extends StateNotifier<MyHomePageControllerState> {
   MyHomePageController(): super(MyHomePageControllerState()) {
-    state.counter = 10; // 初期化処理！
+    state = state.copyWith(counter: 10); // 初期化処理！
   }
   // riverpodで使うproviderはコントローラ用なのでstaticで定義
   static final provider = StateNotifierProvider.autoDispose((ref) => MyHomePageController());
