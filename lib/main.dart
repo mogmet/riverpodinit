@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'my_home_page_controller.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));
@@ -19,27 +20,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePageControllerState {
-  MyHomePageControllerState({required this.title, this.counter = 0});
-
-  String title;
-  int counter;
-}
-
-class MyHomePageController extends StateNotifier<MyHomePageControllerState> {
-  MyHomePageController(String title): super(MyHomePageControllerState(title: title)) {
-    state.counter = 10;
-}
-  static final page1CtrlProvider = StateNotifierProvider.family autoDispose((ref) => MyHomePageController(''));
-}
-
 class MyHomePage extends ConsumerWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final counter = watch()
+    // 値が変わったら再描画してほしいのでwatchする
+    final counter = watch(MyHomePageController.provider).counter;
+    // stateの監視ではなく、controllerの処理を呼びたいときに使うのでreadで呼ぶ
+    final controller = context.read(MyHomePageController.provider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: Text('Counter demo'),
@@ -52,63 +41,20 @@ class MyHomePage extends ConsumerWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              '$counter',
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: controller.incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
-//   }
-// }
-//
-// class _MyHomePageState extends State<MyHomePage> {
-//   int _counter = 0;
-//
-//   void _incrementCounter() {
-//     setState(() {
-//       _counter++;
-//     });
-//   }
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     setState(() {
-//       _counter = 10; // 初期化処理！
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(widget.title),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: <Widget>[
-//             Text(
-//               'You have pushed the button this many times:',
-//             ),
-//             Text(
-//               '$_counter',
-//               style: Theme.of(context).textTheme.headline4,
-//             ),
-//           ],
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: _incrementCounter,
-//         tooltip: 'Increment',
-//         child: Icon(Icons.add),
-//       ), // This trailing comma makes auto-formatting nicer for build methods.
-//     );
-//   }
+  }
 }
