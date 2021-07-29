@@ -14,13 +14,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePageControllerState {
   MyHomePageControllerState({required this.title, this.counter = 0});
+
   String title;
   int counter;
 }
@@ -41,7 +42,7 @@ class MyHomePage extends ConsumerWidget {
     final counter = watch()
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.read(provider)),
+        title: Text('Counter demo'),
       ),
       body: Center(
         child: Column(
